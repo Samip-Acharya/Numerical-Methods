@@ -2,15 +2,15 @@
 #include <math.h> 
 using namespace std; 
 
-typedef struct data
+typedef struct Data
 {
     float x; 
     float y; 
-}data; 
+}Data; 
 
 class LinearRegression
 { 
-        data *dataArray; 
+        Data *dataArray; 
         int size; 
         float xMean; 
         float yMean;
@@ -20,8 +20,11 @@ class LinearRegression
         {
             this->dataArray = NULL; 
             this->size = -1;
+            this->xMean = 0; 
+            this->yMean = 0; 
+            this->m = 0; 
         }
-        void train(data *dataArray, int size)
+        void train(Data *dataArray, int size)
         {
             this->dataArray = dataArray; 
             this->size = size; 
@@ -33,11 +36,11 @@ class LinearRegression
             xMean /= size; 
             yMean /= size;
             float num,den; 
-            num=den=1;
+            num=den=0; 
             for(int i = 0; i<size; i++)
             {
-                num *= (dataArray[i].x-xMean) * (dataArray[i].y-yMean); 
-                den *= pow((dataArray[i].x - xMean),2); 
+                num += (dataArray[i].x-xMean) * (dataArray[i].y-yMean); 
+                den += pow((dataArray[i].x - xMean),2); 
             }
             m = num/den; 
             b = yMean - m*xMean; 
@@ -45,7 +48,7 @@ class LinearRegression
         }
         void predict(float x)
         {
-            cout << "Output corresponding to " << x << "is " << m*x + b << endl; 
+            cout << "Output corresponding to " << x << " is " << m*x + b << endl; 
         }
 };
 
@@ -53,12 +56,12 @@ int main()
 {
     //Inputting Data
     int n; 
-    printf("Enter the number of nodes/data sets\n");
-    scanf("%d",&n); 
-    data *dataArray = new data[n]; 
+    cout << "Enter the number of datasets" << endl; 
+    cin >> n; 
+    Data *dataArray = new Data[n]; 
     for(int i=0;i<n;i++)
     {
-        data temp; 
+        Data temp; 
         cout << "Node " << i << ":" << endl; 
         cout << "x: " << endl;  
         cin >> temp.x; 
